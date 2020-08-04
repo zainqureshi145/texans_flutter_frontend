@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_ui_kit/util/db_helper.dart';
 import 'package:restaurant_ui_kit/model/CartItems.dart';
+import 'package:restaurant_ui_kit/screens/categories_screen.dart';
 
 // ignore: must_be_immutable
 class Cart extends StatefulWidget {
@@ -43,65 +44,73 @@ class _CartState extends State<Cart> {
     return value;
   }
 
+  Future<dynamic> getPrice() async {
+    var price = await db.getTotalPrice();
+    //print('inside getPrice() $price');
+    return price;
+  }
+
   @override
   void initState() {
     getMyList();
     getValue();
+    getPrice();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 10.0,
-          automaticallyImplyLeading: false,
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 5.0),
-              child: FlatButton(
-                splashColor: Colors.transparent,
-                onPressed: () => {
-                  //cartItems.deleteCartDatabase(),
-                  print('Ordered....'),
-                },
-                child: Container(
-                  child: Center(
-                    child: Text(
-                      'Checkout',
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent),
-                    ),
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 10.0,
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 5.0),
+            child: FlatButton(
+              splashColor: Colors.transparent,
+              onPressed: () => {
+                //cartItems.deleteCartDatabase(),
+                print('Ordered....'),
+              },
+              child: Container(
+                child: Center(
+                  child: Text(
+                    'Checkout',
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blueAccent),
                   ),
                 ),
               ),
             ),
-          ],
-          leading: IconButton(
-            icon: Icon(
-              Icons.keyboard_backspace,
-            ),
-            onPressed: () => Navigator.pop(context),
           ),
-          centerTitle: true,
-          title: Text(
-            "Cart",
+        ],
+        leading: IconButton(
+          icon: Icon(
+            Icons.keyboard_backspace,
           ),
+          onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: <Widget>[
-              FutureBuilder(
-                future: db.getCartData(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData)
-                    return Center(child: CircularProgressIndicator());
-                  return ListView.builder(
+        centerTitle: true,
+        title: Text(
+          "Cart",
+        ),
+      ),
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: <Widget>[
+            FutureBuilder(
+              future: db.getCartData(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData)
+                  return Center(child: CircularProgressIndicator());
+                return Container(
+                  height: 350.0,
+                  child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemCount: snapshot.data.length,
@@ -215,160 +224,149 @@ class _CartState extends State<Cart> {
                         ),
                       );
                     },
-                  );
-                },
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-//              Row(
-//                mainAxisAlignment: MainAxisAlignment.start,
-//                children: <Widget>[
-//                  Padding(
-//                    padding: const EdgeInsets.only(left: 10.0),
-//                    child: Text(
-//                      'Special Instructions',
-//                      style: TextStyle(
-//                          fontWeight: FontWeight.bold,
-//                          fontSize: 20.0,
-//                          color: Colors.black),
-//                    ),
-//                  ),
-//                ],
-//              ),
-//              Container(
-//                height: 100.0,
-//                width: double.infinity,
-//                //color: Colors.yellow,
-//                child: Padding(
-//                  padding: const EdgeInsets.all(8.0),
-//                  child: TextField(
-//                    autocorrect: false,
-//                    keyboardType: TextInputType.text,
-//                    controller: myController,
-//                    decoration: InputDecoration(
-//                        hintText: 'Instructions',
-//                        hintStyle: TextStyle(color: Colors.black),
-//                        border: OutlineInputBorder(
-//                            borderRadius: BorderRadius.circular(5.0))),
-//                  ),
-//                ),
-//              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 0, 0, 30.0),
-                  child: FlatButton(
-                    splashColor: Colors.transparent,
-                    onPressed: () => {
-                      //cartItems(),
-//                      CartItems(
-//                          itemName: widget.menuName,
-//                          itemQuantity: widget.quantity,
-//                          itemPrice: widget.price,
-//                          instructions: myController.text),
-//
-//                      cartItems = CartItems(
-//                          itemName: widget.menuName,
-//                          itemQuantity: widget.quantity,
-//                          itemPrice: widget.price,
-//                          instructions: myController.text,
-//                          itemSize: widget.defaultValue,
-//                          itemPicture: widget.picture),
-//                      //db.saveData(cartItems),
-//                      db.insertToCart(cartItems),
-//                      db.getCartData(),
-//                      //CartItems().databaseConnection(),
-                      print('Go back to order more...'),
-                    },
-                    child: Container(
-                      child: Text(
-                        'Add more items',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.0,
-                            color: Colors.blueAccent),
-                      ),
-                    ),
                   ),
-                ),
-              ),
-              FlatButton(
-                onPressed: () {
-                  //db.getCartData();
-                  db.deleteDB();
-                },
-                child: Container(
-                  child: Text(
-                    'Delete DB',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
-                        color: Colors.blueAccent),
-                  ),
-                ),
-              ),
-              FlatButton(
-                onPressed: () {
-                  getCartLength();
-                },
-                child: Container(
-                  child: Text(
-                    'Cart Length',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
-                        color: Colors.blueAccent),
-                  ),
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Text(
-                          'Grand Total =',
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Text(
-                          widget.price,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.0,
-                              color: Colors.black),
-                        ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Text(
-                          'Kr',
-                          style: TextStyle(fontSize: 20.0, color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    child: Container(
-                      height: 2.0,
-                      width: 200.0,
-                      color: Colors.blueAccent,
-                    ),
+                );
+              },
+            ),
+            Container(
+              height: 1,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 1,
+                    blurRadius: 2,
+                    offset: Offset(0, -2), // changes position of shadow
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                FlatButton(
+                  splashColor: Colors.transparent,
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CategoriesScreen()),
+                    ),
+                    print('Go back to order more...'),
+                  },
+                  child: Container(
+                    child: Text(
+                      'Add more',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                          color: Colors.blueAccent),
+                    ),
+                  ),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    //db.getCartData();
+                    db.deleteDB();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CategoriesScreen()),
+                    );
+                  },
+                  child: Container(
+                    child: Text(
+                      'Remove',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                          color: Colors.blueAccent),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            FlatButton(
+              onPressed: () {
+                getCartLength();
+                getPrice();
+              },
+              child: Container(
+                child: Text(
+                  'Cart Length & Prices',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                      color: Colors.blueAccent),
+                ),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        'Grand Total =',
+                        style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      FutureBuilder(
+                        future: db.getTotalPrice(),
+                        builder: (context, snapshot) {
+//                          if (!snapshot.hasData)
+//                            return Center(child: CircularProgressIndicator());
+                          return Text(
+                            //'Null',
+                            snapshot.data.toString(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                                color: Colors.black),
+                          );
+                        },
+                      ),
+//                      Text(
+//                        'Null',
+//                        style: TextStyle(
+//                            fontWeight: FontWeight.bold,
+//                            fontSize: 20.0,
+//                            color: Colors.black),
+//                      ),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                      Text(
+                        'Kr',
+                        style: TextStyle(fontSize: 20.0, color: Colors.black),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: Container(
+                    height: 2.0,
+                    width: 200.0,
+                    color: Colors.blueAccent,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -386,14 +384,3 @@ class _CartState extends State<Cart> {
     return length;
   }
 }
-
-//Container(
-//child: Column(
-//children: <Widget>[
-//Text(snapshot.data[index].itemN()),
-//Text(snapshot.data[index].itemQ()),
-//Text(snapshot.data[index].itemP()),
-//Text(snapshot.data[index].itemPic()),
-//],
-//),
-//),

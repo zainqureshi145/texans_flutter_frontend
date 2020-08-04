@@ -127,6 +127,9 @@ class _AddToCartState extends State<AddToCart> {
                     });
                   },
                 ),
+                SizedBox(
+                  width: 20.0,
+                ),
                 GestureDetector(
                   onTap: () {
                     setState(() {

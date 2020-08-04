@@ -52,10 +52,6 @@ class DatabaseHelper {
 
     var result = await dbClient.rawQuery(sql);
     if (result.length == 0) return null;
-
-//    List<CartItems> list = result.map((item) {
-//      return CartItems.fromMap(item);
-//    }).toList();
     List list = result.map((item) {
       return CartItems.fromMap(item);
     }).toList();
@@ -63,6 +59,17 @@ class DatabaseHelper {
     print(result);
     print(list.length);
     return list;
+  }
+
+  Future getTotalPrice() async {
+    print('Getting Total Price...');
+    var dbClient = await db;
+    String sql;
+    sql = "SELECT SUM(itemPrice) FROM cart";
+    var result = await dbClient.rawQuery(sql);
+    if (result.length == 0) return null;
+    int value = result[0]["SUM(itemPrice)"];
+    return value;
   }
 
   Future<int> getCartLength() async {
