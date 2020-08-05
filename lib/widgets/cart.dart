@@ -29,31 +29,13 @@ class _CartState extends State<Cart> {
 
   List<CartItems> myList;
 
-  Future<int> getMyList() async {
-    myList = await db.getCartData();
-    print('My List is: ${myList[0]}');
-    //print('Length of my List is: ${myList.length}');
-    int length = myList.length;
-    print('Length of my List is: $length');
-    return length;
-  }
-
-  getValue() async {
-    var value = await getMyList();
-    print('This Fucking Vale is: $value');
-    return value;
-  }
-
   Future<dynamic> getPrice() async {
     var price = await db.getTotalPrice();
-    //print('inside getPrice() $price');
     return price;
   }
 
   @override
   void initState() {
-    getMyList();
-    getValue();
     getPrice();
     super.initState();
   }
@@ -70,7 +52,6 @@ class _CartState extends State<Cart> {
             child: FlatButton(
               splashColor: Colors.transparent,
               onPressed: () => {
-                //cartItems.deleteCartDatabase(),
                 print('Ordered....'),
               },
               child: Container(
@@ -118,9 +99,7 @@ class _CartState extends State<Cart> {
                       return Container(
                         height: 110.0,
                         width: double.infinity,
-                        //color: Colors.pink,
                         child: Row(
-                          //crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Padding(
@@ -131,7 +110,6 @@ class _CartState extends State<Cart> {
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   image: DecorationImage(
-                                    //image: AssetImage(widget.picture),
                                     image: AssetImage(
                                         snapshot.data[index].itemPic()),
                                     fit: BoxFit.fill,
@@ -147,9 +125,7 @@ class _CartState extends State<Cart> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  //widget.menuName,
                                   snapshot.data[index].itemN(),
-
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20.0,
@@ -164,7 +140,6 @@ class _CartState extends State<Cart> {
                                         MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
                                       Row(
-                                        //crossAxisAlignment: CrossAxisAlignment.stretch,
                                         children: <Widget>[
                                           Text(
                                             'Size',
@@ -207,7 +182,6 @@ class _CartState extends State<Cart> {
                                             width: 5.0,
                                           ),
                                           Text(
-                                            //quantity(),
                                             snapshot.data[index].itemQ(),
                                             style: TextStyle(
                                                 fontSize: 15.0,
@@ -271,7 +245,6 @@ class _CartState extends State<Cart> {
                 ),
                 FlatButton(
                   onPressed: () {
-                    //db.getCartData();
                     db.deleteDB();
                     Navigator.push(
                       context,
@@ -290,21 +263,6 @@ class _CartState extends State<Cart> {
                   ),
                 ),
               ],
-            ),
-            FlatButton(
-              onPressed: () {
-                getCartLength();
-                getPrice();
-              },
-              child: Container(
-                child: Text(
-                  'Cart Length & Prices',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.blueAccent),
-                ),
-              ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -327,10 +285,9 @@ class _CartState extends State<Cart> {
                       FutureBuilder(
                         future: db.getTotalPrice(),
                         builder: (context, snapshot) {
-//                          if (!snapshot.hasData)
-//                            return Center(child: CircularProgressIndicator());
+                          if (!snapshot.hasData)
+                            return Center(child: CircularProgressIndicator());
                           return Text(
-                            //'Null',
                             snapshot.data.toString(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -339,13 +296,6 @@ class _CartState extends State<Cart> {
                           );
                         },
                       ),
-//                      Text(
-//                        'Null',
-//                        style: TextStyle(
-//                            fontWeight: FontWeight.bold,
-//                            fontSize: 20.0,
-//                            color: Colors.black),
-//                      ),
                       SizedBox(
                         width: 5.0,
                       ),

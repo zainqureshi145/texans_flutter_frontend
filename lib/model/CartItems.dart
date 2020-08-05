@@ -60,10 +60,10 @@ class CartItems {
   String get getItemSize => itemSize;
   String get getItemPicture => itemPicture;
 
-//  @override
-//  String toString() {
-//    return '$itemName, $itemQuantity, $itemPrice, $instructions, $itemSize, $itemPicture';
-//  }
+  @override
+  String toString() {
+    return '$itemName, $itemQuantity, $itemPrice, $instructions, $itemSize, $itemPicture';
+  }
 
   String itemN() {
     return '$itemName';

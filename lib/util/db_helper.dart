@@ -79,7 +79,7 @@ class DatabaseHelper {
     sql = "SELECT * FROM cart";
 
     var result = await dbClient.rawQuery(sql);
-    //if (result.length == 0) return null;
+    if (result.length == 0) return null;
 
     List<CartItems> list = result.map((item) {
       return CartItems.fromMap(item);
@@ -95,12 +95,11 @@ class DatabaseHelper {
     sql = "SELECT * FROM cart";
 
     var result = await dbClient.rawQuery(sql);
-    //if (result.length == 0) return null;
+    if (result.length == 0) return null;
 
     List<CartItems> list = result.map((item) {
       return CartItems.fromMap(item);
     }).toList();
-    //int length = list.length;
     return list;
   }
 
@@ -119,18 +118,4 @@ class DatabaseHelper {
     print(result);
     return list;
   }
-
-//  deleteCartDatabase() async {
-//    var path = join(await getDatabasesPath(), 'cart.db');
-//    await deleteDatabase(path);
-//    print('Database Deleted...');
-//  }
-
-//  deleteDB() async {
-//    io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
-//    String path = join(documentsDirectory.path, 'cart.db');
-//    _db.close();
-//    await deleteDatabase(path);
-//    print('Database Deleted...');
-//  }
 }
